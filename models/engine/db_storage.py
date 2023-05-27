@@ -85,12 +85,11 @@ class DBStorage:
 
     def count(self, cls=None):
         """ Return number of objs matching the given class"""
-        if cls:
+        if cls is not None:
             if cls in classes.values():
                 return len(self.__session.query(cls).all())
         else:
             count = 0
             for cls in classes.values():
                 count += len(self.__session.query(cls).all())
-            return count
-        return 0
+                return count
