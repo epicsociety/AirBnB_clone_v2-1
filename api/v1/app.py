@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Airbnb flask app """
 
-from flask import Flask
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 from os import environ
@@ -18,6 +18,14 @@ app.register_blueprint(app_views)
 def teardown_db(exception):
     """ close storage """
     storage.close()
+
+
+@app.errorhandler(404)
+def error_404(error):
+    """ returns the not found """
+    response = jsonify({"error": "Not found"})
+    response.status_code = 404
+    return response
 
 
 if __name__ == "__main__":
