@@ -3,7 +3,7 @@
 
 from models.state import State
 from models import storage
-from flask import abort, request
+from flask import abort, request, jsonify
 from api.v1.views import app_views
 
 
@@ -12,7 +12,7 @@ def get_states():
     """ retrieves all states objects """
     states = storage.all(State).values()
     state_list = [state.to_dict() for state in states]
-    return state_list
+    return jsonify(state_list)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'])
@@ -21,7 +21,7 @@ def get_state_id(state_id):
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
-    return my_state.to_dict()
+    return jsonify(my_state.to_dict())
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
@@ -32,7 +32,8 @@ def delete_state(state_id):
         abort(404)
     else:
         storage.delete(state)
-        return {}, 200
+        storage.save()
+        return jsonify({}), 200
 
 
 @app_views.route('/states', methods=['POST'])
@@ -46,5 +47,25 @@ def create_state():
     if not name:
         abort(400, "Missing name")
     state = State(name=name)
-    state.save()
-    return state.to_dict(), 201
+    state_dict = state.to_dict()
+    storage.save()
+    return jsonify(state_dict), 201
+
+@app_views.route('/states/<state_id>', methods=['PUT'])
+def update_state(state_id):
+    """ updates a state related to the state_id """
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+
+    data = request.get_json()
+    if not data:
+        abort(400, "Not a JSON")
+    for key, value in data.items():
+        if key == 'id' or key == 'created_at' or key == 'updated_at':
+            pass
+        else:
+            setattr(state, key, value)
+    state_dict = state.to_dict()
+    storage.save()
+    return jsonify(state_dict), 200
