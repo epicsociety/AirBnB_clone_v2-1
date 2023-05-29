@@ -18,6 +18,7 @@ def get_reviews(place_id):
     reviews = [review.to_dict() for review in places.reviews]
     return reviews
 
+
 @app_views.route('/reviews/<review_id>', methods=['GET'])
 def get_review(review_id):
     """A method to retrieve a Review object"""
@@ -68,6 +69,7 @@ def create_review(place_id):
     storage.save()
     return jsonify(review_dict), 201
 
+
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
 def update_review(city_id):
     """ updates a review related to the review_id """
@@ -86,4 +88,4 @@ def update_review(city_id):
             setattr(review, key, value)
     review_dict = review.to_dict()
     storage.save()
-    return jsonify(review_dict), 200    
+    return jsonify(review_dict), 200

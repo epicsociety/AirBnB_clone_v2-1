@@ -18,6 +18,7 @@ def get_cities(state_id):
     cities = [city.to_dict() for city in state.cities]
     return jsonify(cities)
 
+
 @app_views.route('/cities/<city_id>', methods=['GET'])
 def get_city(city_id):
     """A method to retrieve a City object"""
@@ -55,6 +56,7 @@ def create_city(state_id):
     storage.save()
     return jsonify(city_dict), 201
 
+
 @app_views.route('/cities/<city_id>', methods=['PUT'])
 def update_city(city_id):
     """ updates a city related to the city_id """
@@ -72,4 +74,4 @@ def update_city(city_id):
             setattr(city, key, value)
     city_dict = city.to_dict()
     storage.save()
-    return jsonify(city_dict), 200    
+    return jsonify(city_dict), 200

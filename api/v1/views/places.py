@@ -18,6 +18,7 @@ def get_places(city_id):
     places = [place.to_dict() for place in cities.places]
     return places
 
+
 @app_views.route('/places/<place_id>', methods=['GET'])
 def get_place(place_id):
     """A method to retrieve a place object"""
@@ -64,6 +65,7 @@ def create_place(city_id):
     storage.save()
     return jsonify(place_dict), 201
 
+
 @app_views.route('/places/<place_id>', methods=['PUT'])
 def update_place(place_id):
     """ updates a place related to the place_id """
@@ -81,4 +83,4 @@ def update_place(place_id):
             setattr(place, key, value)
     place_dict = place.to_dict()
     storage.save()
-    return jsonify(place_dict), 200    
+    return jsonify(place_dict), 200

@@ -15,6 +15,7 @@ def get_users():
     user_dict = [user.to_dict() for user in users]
     return user_dict
 
+
 @app_views.route('/users/<user_id>', methods=['GET'])
 def get_user(user_id):
     """A method to retrieve a User object"""
@@ -55,6 +56,7 @@ def create_user():
     storage.save()
     return jsonify(user_dict), 201
 
+
 @app_views.route('/users/<user_id>', methods=['PUT'])
 def update_user(user_id):
     """ updates a user related to the user_id """
@@ -72,4 +74,4 @@ def update_user(user_id):
             setattr(user, key, value)
     user_dict = user.to_dict()
     storage.save()
-    return jsonify(user_dict), 200    
+    return jsonify(user_dict), 200
