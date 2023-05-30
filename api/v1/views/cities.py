@@ -49,6 +49,9 @@ def create_city(state_id):
         abort(400, "Not a JSON")
     if "name" not in data:
         abort(400, "Missing name")
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
     city = City(state_id=state_id, **data)
     city_dict = city.to_dict()
     storage.new(city)
