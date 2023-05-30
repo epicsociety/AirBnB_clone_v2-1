@@ -64,8 +64,8 @@ def create_amenity_id(place_id, amenity_id):
         amenity_objs = place.amenities
     else:
         amenity_objs = place.amenity_ids
-    if amenity_id in amenity_objs:
-        return 200
+    if amenity in amenity_objs:
+        return jsonify(amenity.to_dict()), 200
     else:
         if getenv('HBNB_TYPE_STORAGE') == 'db':
             for key, value in amenity.items():
