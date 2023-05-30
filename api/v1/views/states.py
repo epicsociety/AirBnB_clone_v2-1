@@ -3,7 +3,7 @@
 
 from models.state import State
 from models import storage
-from flask import abort, request, jsonify, make_response
+from flask import abort, request, jsonify
 from api.v1.views import app_views
 
 
@@ -49,7 +49,7 @@ def create_state():
     storage.new(state)
     storage.save()
     state_dict = state.to_dict()
-    return make_response(jsonify(state_dict), 201)
+    return jsonify(state_dict), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
