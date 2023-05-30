@@ -13,4 +13,5 @@ import api.v1.views.amenities
 import api.v1.views.users
 import api.v1.views.places
 import api.v1.views.places_reviews
+import api.v1.views.places_amenities
 # __all__ = ['index']  # Ignore PEP8 warning for wildcard import
