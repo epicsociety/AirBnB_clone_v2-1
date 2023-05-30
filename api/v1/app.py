@@ -2,6 +2,7 @@
 """ Airbnb flask app """
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
 from os import environ
@@ -10,6 +11,7 @@ host = environ.get('HBNB_API_HOST', default='0.0.0.0')
 port = environ.get('HBNB_API_PORT', default='5000')
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 app.register_blueprint(app_views)
 
