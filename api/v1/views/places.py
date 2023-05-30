@@ -54,13 +54,13 @@ def create_place(city_id):
     user_id = data.get("user_id")
     if not user_id:
         abort(400, "Missing user_id")
-    user_values = storage.all(User).values()
-    if user_id not in user_values:
+    user_values = storage.get(User, user_id)
+    if not user_values:
         abort(404)
     name = data.get("name")
     if not name:
         abort(400, "Missing name")
-    place = Place(**data)
+    place = Place(city_id=city_id, **data)
     storage.new(place)
     storage.save()
     place_dict = place.to_dict()
