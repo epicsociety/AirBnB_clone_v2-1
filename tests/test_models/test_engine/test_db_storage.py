@@ -86,3 +86,35 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_delete(self):
+        """Test that delete properly deletes objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_reload(self):
+        """Test that reload properly reloads objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_close(self):
+        """Test that close properly closes file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get properly retrieves objects from file.json"""
+        state = State(name="Kenya")
+        models.storage.new(state)
+        models.storage.save()
+        self.assertIs(state, models.storage.get("State", state.id))
+        self.assertIs(None, models.storage.get("State", "Try"))
+        self.assertIs(None, models.storage.get("Test", "Try"))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test that count properly counts objects in file.json"""
+        initial_count = models.storage.count()
+        self.assertEqual(models.storage.count("Test"), 0)
+        state = State(name="Uganda")
+        models.storage.new(state)
+        models.storage.save()
+        self.assertEqual(models.storage.count("State"), initial_count + 1)
