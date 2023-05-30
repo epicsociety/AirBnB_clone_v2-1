@@ -14,7 +14,7 @@ from models import storage
 def get_reviews(place_id):
     """A method to retrieve reviews """
     places = storage.get(Place, place_id)
-    if not place:
+    if not places:
         abort(404)
     reviews = [review.to_dict() for review in places.reviews]
     return jsonify(reviews)
@@ -75,7 +75,7 @@ def create_review(place_id):
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'], strict_slashes=False)
-def update_review(city_id):
+def update_review(review_id):
     """ updates a review related to the review_id """
     review = storage.get(Review, review_id)
     if review is None:
