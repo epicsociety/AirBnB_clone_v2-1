@@ -27,7 +27,7 @@ def get_amenity_id(place_id):
     return jsonify(amenity_list)
 
 
-@app_views.route('places/<place_id>/amenities/<amenity_id',
+@app_views.route('places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE'], strict_slashes=False)
 def delete_amenity_id(place_id, amenity_id):
     """ deletes a amenity related to amenity_id and place_id"""
