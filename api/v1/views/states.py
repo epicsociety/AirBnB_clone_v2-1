@@ -3,7 +3,7 @@
 
 from models.state import State
 from models import storage
-from flask import abort, request, jsonify
+from flask import abort, request, jsonify, make_response
 from api.v1.views import app_views
 
 
@@ -15,7 +15,7 @@ def get_states():
     return jsonify(state_list)
 
 
-@app_views.route('/states/<state_id>', methods=['GET'])
+@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state_id(state_id):
     """ retrieves states according state_id"""
     my_state = storage.get(State, state_id)
@@ -24,7 +24,7 @@ def get_state_id(state_id):
     return jsonify(my_state.to_dict())
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'])
+@app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """ deletes a state related to requested state_id """
     state = storage.get(State, state_id)
@@ -36,26 +36,22 @@ def delete_state(state_id):
         return jsonify({}), 200
 
 
-@app_views.route('/states', methods=['POST'])
-def create_state(state):
-    """ Create a state """
-    data = request.get_json()
-    if data is None:
-        abort(400, "Not a JSON")
-    # key = requesti.keys()
-    data = data.to_dict()
-    return jsonify(data)
-    #name = data["name"]
-    #if not name:
-     #   abort(400, "Missing name")
-    #state = State(name=name)
-    #state_dict = state.to_dict()
-    #storage.new(state)
-    #storage.save()
-    #return jsonify(state_dict), 201
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
+def create_state():
+   """ Create a state """
+   data = request.get_json()
+   if not data:
+       abort(400, "Not a JSON")
+   if "name" not in data:
+       abort(400, "Missing name")
+   state = State(**data)
+   storage.new(state)
+   storage.save()
+   state_dict = state.to_dict()
+   return make_response(jsonify(state_dict), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
     """ updates a state related to the state_id """
     state = storage.get(State, state_id)
